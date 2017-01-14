@@ -15,8 +15,7 @@ tempo = int(sys.argv[2])
 for request in range(100):
     time.sleep(tempo / 1000)
     print("Sending request n° %s" % request)
-    message = "%s: Hello" % client_name
-    socket.send(message.encode('utf-8'))
+    socket.send_string("%s: Hello" % client_name)
 
-    reply = socket.recv()
-    print("Received reply %s [ %s ]" % (request, reply.decode('utf-8')))
+    reply = socket.recv_string()
+    print("Received reply %s [ %s ]" % (request, reply))
