@@ -1,0 +1,9 @@
+{
+  "name": "3-round-robin",
+  "version": "1.0.0",
+  "main": "pull.js",
+  "license": "MIT",
+  "dependencies": {
+    "zmq": "^2.15.3"
+  }
+}

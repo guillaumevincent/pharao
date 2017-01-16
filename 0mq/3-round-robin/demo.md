@@ -12,5 +12,5 @@ pull 2:
     
 pull 3:
     
-    python pull.py
+    node pull.js
     
