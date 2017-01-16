@@ -1,11 +1,18 @@
-# -*- coding: utf-8 -*-
+import json
 
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import zmq
 
 
-class TutorialPipeline(object):
+class ZMQPipeline(object):
+    def open_spider(self, spider):
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.PUSH)
+        self.socket.bind("tcp://127.0.0.1:5557")
+
+    def close_spider(self, spider):
+        self.socket.close()
+        self.context.term()
+
     def process_item(self, item, spider):
+        self.socket.send_string(json.dumps(dict(item)))
         return item
