@@ -1,7 +1,8 @@
 import json
-import matplotlib.pyplot as plt
-from sklearn import linear_model
+
 import numpy as np
+import zmq
+from sklearn import linear_model
 
 classified_houses = []
 with open('houses.json') as data_file:
@@ -14,12 +15,8 @@ with open('houses.json') as data_file:
             h['label'] = 0
         classified_houses.append(h)
 
-x_all = [h['price'] for h in classified_houses]
-y_all = [h['surface'] for h in classified_houses]
-
-
-x=[]
-y=[]
+x = []
+y = []
 for house in classified_houses:
     if house['label'] == 1:
         x.append([house['price']])
@@ -33,17 +30,19 @@ y_test_data = y[-50:]
 regr = linear_model.LinearRegression()
 regr.fit(x_train_data, y_train_data)
 
-plt.plot(x_all, y_all, 'bo')
-plt.scatter(x_test_data, y_test_data,  color='red')
-plt.plot(x_test_data, regr.predict(x_test_data), color='red', linewidth=1)
-plt.axis([0, 1200000, 0, 1000])
+context = zmq.Context()
 
+leboncoin_socket = context.socket(zmq.PULL)
+leboncoin_socket.connect("tcp://127.0.0.1:5557")
 
-print(regr.predict(170000))
-print('Coefficients: \n', regr.coef_)
-print("Mean squared error: %.2f" % np.mean((regr.predict(x_test_data) - y_test_data) ** 2))
-print('Variance score: %.2f' % regr.score(x_test_data, y_test_data))
-plt.ylabel('area square meter')
-plt.xlabel('price')
-plt.title('linear regression Bordeaux houses')
-plt.show()
+awesome_house_socket = context.socket(zmq.PUB)
+awesome_house_socket.bind("tcp://127.0.0.1:5558")
+
+while True:
+    house = json.loads(leboncoin_socket.recv_string())
+    prediction_area = regr.predict(house['price'])
+    if np.math.sqrt((prediction_area - 90) ** 2) < prediction_area * 0.1:
+        print('awesome house %s€ for %sm\u00B2' % (house['price'], house['surface']))
+        awesome_house_socket.send_string(json.dumps(house))
+    else:
+        print('rejected house %s€ for %sm\u00B2' % (house['price'], house['surface']))

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Awesome House</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Price</th>
+                    <th>Surface</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for house in houses%}
+                <tr>
+                    <th> {{ house.id }}</th>
+                    <td> {{ house.price }}</td>
+                    <td> {{ house.surface }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
