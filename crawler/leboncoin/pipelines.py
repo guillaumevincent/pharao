@@ -1,5 +1,3 @@
-import json
-
 import zmq
 
 
@@ -14,5 +12,5 @@ class ZMQPipeline(object):
         self.context.term()
 
     def process_item(self, item, spider):
-        self.socket.send_string(json.dumps(dict(item)))
+        self.socket.send_json(dict(item))
         return item

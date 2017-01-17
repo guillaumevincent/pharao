@@ -1,17 +1,16 @@
 import csv
-import json
 
 import zmq
 
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
 
-print('Collecting awesome house data…')
+print('subscribe to awesome houses data…')
 socket.connect('tcp://127.0.0.1:5558')
 socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
 while True:
-    house = json.loads(socket.recv_string())
+    house = socket.recv_json()
     print(house)
     with open('houses.csv', 'a') as csvfile:
         fieldnames = ['id', 'surface', 'price']

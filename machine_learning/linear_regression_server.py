@@ -38,11 +38,14 @@ leboncoin_socket.connect("tcp://127.0.0.1:5557")
 awesome_house_socket = context.socket(zmq.PUB)
 awesome_house_socket.bind("tcp://127.0.0.1:5558")
 
+print('waiting houses on port 5557...')
+print('publish awesome houses on port 5558...')
+
 while True:
-    house = json.loads(leboncoin_socket.recv_string())
+    house = leboncoin_socket.recv_json()
     prediction_area = regr.predict(house['price'])
     if np.math.sqrt((prediction_area - 90) ** 2) < prediction_area * 0.1:
         print('awesome house %s€ for %sm\u00B2' % (house['price'], house['surface']))
-        awesome_house_socket.send_string(json.dumps(house))
+        awesome_house_socket.send_json(house)
     else:
         print('rejected house %s€ for %sm\u00B2' % (house['price'], house['surface']))

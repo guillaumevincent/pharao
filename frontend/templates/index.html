@@ -5,16 +5,17 @@
     <title>Awesome House</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
           integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <style>
-        th, td {
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <div class="col text-center">
+        <div class="col">
+            <h1 class="display"><span class="badge badge-success"> {{houses|length}}  Awesome Houses</span></h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
             <table class="table">
                 <thead>
                 <tr>
@@ -27,8 +28,8 @@
                 {% for house in houses%}
                 <tr>
                     <th> {{ house.id }}</th>
-                    <td> {{ house.price }}</td>
-                    <td> {{ house.surface }}</td>
+                    <td> {{ house.price }} €</td>
+                    <td> {{ house.surface }} m&sup2;</td>
                 </tr>
                 {% endfor %}
                 </tbody>
