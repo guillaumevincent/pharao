@@ -1,7 +1,8 @@
 import json
+
 import matplotlib.pyplot as plt
-from sklearn import linear_model
 import numpy as np
+from sklearn import linear_model
 
 classified_houses = []
 with open('houses.json') as data_file:
@@ -17,13 +18,16 @@ with open('houses.json') as data_file:
 x_all = [h['price'] for h in classified_houses]
 y_all = [h['surface'] for h in classified_houses]
 
-
-x=[]
-y=[]
+x_good = []
+y_good = []
+x = []
+y = []
 for house in classified_houses:
     if house['label'] == 1:
         x.append([house['price']])
+        x_good.append(house['price'])
         y.append(house['surface'])
+        y_good.append(house['surface'])
 
 x_train_data = x[0:-50]
 x_test_data = x[-50:]
@@ -34,10 +38,10 @@ regr = linear_model.LinearRegression()
 regr.fit(x_train_data, y_train_data)
 
 plt.plot(x_all, y_all, 'bo')
-plt.scatter(x_test_data, y_test_data,  color='red')
-plt.plot(x_test_data, regr.predict(x_test_data), color='red', linewidth=1)
+plt.plot(x_good, y_good, 'ro')
+plt.scatter(x_test_data, y_test_data, color='red')
+plt.plot(x_test_data, regr.predict(x_test_data), color='black', linewidth=3)
 plt.axis([0, 1200000, 0, 1000])
-
 
 print(regr.predict(170000))
 print('Coefficients: \n', regr.coef_)
