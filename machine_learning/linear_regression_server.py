@@ -44,7 +44,7 @@ print('publish awesome houses on port 5558...')
 while True:
     house = leboncoin_socket.recv_json()
     prediction_area = regr.predict(house['price'])
-    if np.math.sqrt((prediction_area - house['area']) ** 2) < prediction_area * 0.1:
+    if np.math.sqrt((prediction_area - house['surface']) ** 2) < prediction_area * 0.1:
         print('awesome house %s€ for %sm\u00B2' % (house['price'], house['surface']))
         awesome_house_socket.send_json(house)
     else:
